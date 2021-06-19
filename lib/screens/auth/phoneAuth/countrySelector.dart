@@ -179,7 +179,6 @@ class OtpPageState extends State<OtpPage> {
     ];
 
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Enter OTP"),
         backgroundColor: Colors.red,

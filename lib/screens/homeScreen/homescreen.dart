@@ -1,6 +1,7 @@
+import 'package:clearit_server/screens/Notes&%20Equ/notesEquationIndex.dart';
 import 'package:flutter/material.dart';
-import 'package:clearit_server/screens/askADoubt/askADoubt.dart';
 import 'package:clearit_server/screens/DailyWord/dailyWord.dart';
+import 'package:clearit_server/screens/askADoubt/viewQuestions/askedQuestions.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,10 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 FlatButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AskADoubt()));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => AskADoubt()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AskedQuestions()));
                   },
-                  child: Text('Ask a doubt'),
+                  child: Text('Asked doubts'),
                 ),
                 // FlatButton(
                 //   onPressed: () {},
@@ -50,7 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('Rapid Fire'),
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotesAndEquationScreen()));
+                  },
                   child: Text('Notes & Equation'),
                 ),
               ],

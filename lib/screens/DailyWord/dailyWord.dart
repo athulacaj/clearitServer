@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
-import 'package:clearit_server/screens/askADoubt/dataBase.dart';
-import 'package:clearit_server/screens/askADoubt/uploadImage.dart';
 import 'package:clearit_server/utility/widgets/commonAppBar.dart';
+import 'dataBase.dart';
+import 'uploadImage.dart';
+import 'dataBase.dart';
+import 'package:clearit_server/utility/functions/uploadFiles.dart';
 
 bool _showSpinner = false;
 
@@ -18,15 +20,14 @@ Size size;
 
 class _DailyWordState extends State<DailyWord> {
   TextEditingController doubtController;
-  UploadImage uploadImage;
   String note;
   String word;
   String imgUrl;
   bool isUploading = false;
+
   @override
   void initState() {
     _showSpinner = false;
-    uploadImage = UploadImage(callBack);
     isUploading = false;
     TextEditingController doubtController = TextEditingController();
     // TODO: implement initState
@@ -103,7 +104,7 @@ class _DailyWordState extends State<DailyWord> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    uploadImage.pickedFile != null
+                    uploadFile != null && uploadFile.file != null
                         ? Container(
                             height: 80,
                             width: 240,
@@ -114,11 +115,11 @@ class _DailyWordState extends State<DailyWord> {
                                   width: 240,
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                    image: FileImage(
-                                        File(uploadImage.pickedFile.path)),
+                                    image:
+                                        FileImage(File(uploadFile.file.path)),
                                   )),
                                 ),
-                                uploadImage.progress == 1.0
+                                uploadFile.progress == 1.0
                                     ? Container()
                                     : Positioned(
                                         left: 105,
@@ -128,7 +129,7 @@ class _DailyWordState extends State<DailyWord> {
                                           width: 30,
                                           child: CircularProgressIndicator(
                                             backgroundColor: Colors.grey,
-                                            value: uploadImage.progress,
+                                            value: uploadFile.progress,
                                           ),
                                         ),
                                       ),
@@ -144,12 +145,11 @@ class _DailyWordState extends State<DailyWord> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        isUploading = true;
-                        uploadImage.uploadImage();
+                        addImageFunction('image');
                       },
                     ),
                     SizedBox(
-                        height: uploadImage.pickedFile != null
+                        height: UploadFileClass != null
                             ? size.height / 13
                             : size.height / 5.2),
                     FlatButton(
@@ -163,24 +163,28 @@ class _DailyWordState extends State<DailyWord> {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        if (isUploading && uploadImage.progress != 1.0) {
+                        if (uploadFile != null && !uploadFile.isUploaded) {
                           showToast(
-                              "You are uploading a image ..!! Please wait until the upload finish");
-                        } else if (word == null) {
-                          showToast('Enter Doubt before submit..!!');
+                              "You are uploading a file ..!! Please wait until the upload finish");
                         } else {
+                          if (uploadFile != null && uploadFile.url != null) {
+                            imageUrl = uploadFile.url;
+                          }
                           Map<String, dynamic> dailyWordDetails = {
                             'word': word,
-                            'note': note,
-                            'imageUrl': uploadImage.url
+                            'desc': note,
+                            'image': imageUrl
                           };
-
-                          AskDoubtDatabase askDoubtDatabase =
-                              AskDoubtDatabase(dailyWordDetails, context);
-                          showMyDialog(context, dailyWordDetails,
-                              askDoubtDatabase, callBack);
+                          _showSpinner = true;
+                          setState(() {});
+                          DailyDatabase dailydataBase =
+                              DailyDatabase(dailyWordDetails, context);
+                          await dailydataBase.saveData(dailyWordDetails);
+                          _showSpinner = false;
+                          showToast("saved ");
+                          setState(() {});
                         }
                       },
                     ),
@@ -193,53 +197,23 @@ class _DailyWordState extends State<DailyWord> {
       ),
     );
   }
+
+  String imageUrl;
+  UploadFileClass uploadFile;
+  void addImageFunction(String type) async {
+    _showSpinner = true;
+    setState(() {});
+    uploadFile = new UploadFileClass(callBack);
+    bool isSelected = await uploadFile.uploadFile(type);
+    if (isSelected) imageUrl = uploadFile.url;
+    _showSpinner = false;
+    setState(() {});
+  }
 }
 
 // int dropIndex=0;
 String dropValue = dropDown[0];
 List dropDown = ['bank', 'psc'];
-
-Future<void> showMyDialog(
-    BuildContext context,
-    Map<String, dynamic> dailyWordDetails,
-    AskDoubtDatabase askDoubtDatabase,
-    Function callBack) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Are you sure !!'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('On submitting a coin is deducted'),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          FlatButton(
-            child: Text('ok'),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              _showSpinner = true;
-              callBack();
-              await askDoubtDatabase.saveData(dailyWordDetails);
-              _showSpinner = false;
-              callBack();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
 void showToast(String message) {
   Fluttertoast.showToast(

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       value: SystemUiOverlayStyle.light,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'StudyWithFun',
+        title: 'ClearIt server',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: Color(0xff7f86ff),
