@@ -5,13 +5,13 @@ import '../commonAppbar.dart';
 import 'indvidualTopics/Notes&Equation.dart';
 
 class TopicsInCoursesScreen extends StatefulWidget {
-  final String courseName;
+  final String? courseName;
   TopicsInCoursesScreen({this.courseName});
   @override
   _TopicsInCoursesScreenState createState() => _TopicsInCoursesScreenState();
 }
 
-FirebaseFirestore _firestore;
+late FirebaseFirestore _firestore;
 
 class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
   @override
@@ -23,7 +23,7 @@ class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List topicsList = [];
+    List? topicsList = [];
 
     return Scaffold(
       appBar: commonAppBar(title: 'Topics', context: context),
@@ -45,7 +45,7 @@ class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
               print(topicsList);
               return Expanded(
                 child: ListView.builder(
-                  itemCount: topicsList.length,
+                  itemCount: topicsList!.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -58,7 +58,7 @@ class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         NotesAndEquationScreen(
-                                          topic: topicsList[i],
+                                          topic: topicsList![i],
                                         )));
                           },
                           child: ConstrainedBox(
@@ -66,7 +66,7 @@ class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
                             child: Container(
                                 padding: EdgeInsets.all(8),
                                 alignment: Alignment.center,
-                                child: Text(topicsList[i])),
+                                child: Text(topicsList![i])),
                           ),
                         ),
                       ),
@@ -96,8 +96,8 @@ class _TopicsInCoursesScreenState extends State<TopicsInCoursesScreen> {
 }
 
 void _modalBottomSheetMenu(
-    BuildContext context, List coursesList, String courseName) {
-  List returnList = coursesList;
+    BuildContext context, List? coursesList, String? courseName) {
+  List? returnList = coursesList;
   TextEditingController textEditingController = TextEditingController();
   showModalBottomSheet(
       context: context,
@@ -132,7 +132,7 @@ void _modalBottomSheetMenu(
                 Spacer(),
                 TextButton(
                     onPressed: () async {
-                      returnList.add(textEditingController.text);
+                      returnList!.add(textEditingController.text);
                       DocumentReference doc = _firestore
                           .collection('notes/subjects/all/$courseName/subjects')
                           .doc('topics');

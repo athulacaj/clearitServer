@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 PreferredSizeWidget commonAppBar(
-    {String title, @required BuildContext context}) {
+    {String? title, required BuildContext context}) {
   return AppBar(
     // brightness: Brightness.light,
     backgroundColor: Colors.white,

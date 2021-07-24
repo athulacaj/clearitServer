@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class AudioWidget extends StatefulWidget {
-  final String url;
+  final String? url;
   AudioWidget({this.url});
   @override
   _AudioWidgetState createState() => _AudioWidgetState();
@@ -49,7 +49,7 @@ class _AudioWidgetState extends State<AudioWidget> {
                         setState(() {});
                       }
                     } else {
-                      int result = await audioPlayer.play(widget.url);
+                      int result = await audioPlayer.play(widget.url!);
                       print(result);
                       if (result == 1) {
                         _isPlaying = true;

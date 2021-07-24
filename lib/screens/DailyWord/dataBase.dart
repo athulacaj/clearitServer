@@ -16,6 +16,6 @@ class DailyDatabase {
     await FirebaseFirestore.instance
         .collection('dailyWord')
         .doc('${now.toString().substring(0, 10)}')
-        .set(dailyQuestion);
+        .set(dailyQuestion as Map<String, dynamic>);
   }
 }

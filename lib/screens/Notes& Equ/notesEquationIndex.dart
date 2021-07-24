@@ -9,7 +9,7 @@ class NotesAndEquationScreen extends StatefulWidget {
   _NotesAndEquationScreenState createState() => _NotesAndEquationScreenState();
 }
 
-FirebaseFirestore _firestore;
+late FirebaseFirestore _firestore;
 
 class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
   @override
@@ -21,7 +21,7 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List coursesList = [];
+    List? coursesList = [];
 
     return Scaffold(
       appBar: commonAppBar(title: 'Notes and Equation', context: context),
@@ -40,7 +40,7 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
               print(coursesList);
               return Expanded(
                 child: ListView.builder(
-                  itemCount: coursesList.length,
+                  itemCount: coursesList!.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -52,7 +52,7 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => TopicsInCoursesScreen(
-                                          courseName: coursesList[i],
+                                          courseName: coursesList![i],
                                         )));
                           },
                           child: ConstrainedBox(
@@ -60,7 +60,7 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
                             child: Container(
                                 padding: EdgeInsets.all(8),
                                 alignment: Alignment.center,
-                                child: Text(coursesList[i])),
+                                child: Text(coursesList![i])),
                           ),
                         ),
                       ),
@@ -89,8 +89,8 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
   }
 }
 
-void _modalBottomSheetMenu(BuildContext context, List coursesList) {
-  List returnList = coursesList;
+void _modalBottomSheetMenu(BuildContext context, List? coursesList) {
+  List? returnList = coursesList;
   TextEditingController textEditingController = TextEditingController();
   showModalBottomSheet(
       context: context,
@@ -125,7 +125,7 @@ void _modalBottomSheetMenu(BuildContext context, List coursesList) {
                 Spacer(),
                 TextButton(
                     onPressed: () async {
-                      returnList.add(textEditingController.text);
+                      returnList!.add(textEditingController.text);
                       DocumentReference doc =
                           _firestore.collection('notes').doc('courses');
                       await doc.set({'coursesList': returnList});

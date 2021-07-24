@@ -1,21 +1,21 @@
 import 'dart:io';
 
-import 'package:clearit_server/screens/DailyWord/dailyWord.dart';
+import 'package:clearit_server/utility/functions/showToast.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
+import 'package:clearit_server/utility/uploadFiles.dart';
 import 'package:clearit_server/utility/widgets/commonAppBar.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dataBase.dart';
-import '../../../utility/uploadFiles.dart';
 
 class ReplyScreen extends StatefulWidget {
   final String id;
   final int replyingNo;
-  ReplyScreen({@required this.id, @required this.replyingNo});
+  ReplyScreen({required this.id, required this.replyingNo});
   @override
   _ReplyScreenState createState() => _ReplyScreenState();
 }
 
-UploadFileClass uploadImage;
+late UploadFileClass uploadImage;
 bool _showSpinner = false;
 bool isUploading = false;
 List<UploadFileClass> uploadFileList = [];
@@ -25,7 +25,7 @@ class _ReplyScreenState extends State<ReplyScreen> {
   @override
   void initState() {
     _showSpinner = false;
-    uploadImage = UploadFileClass(callBack);
+    uploadImage = UploadFileClass(callBack, "reply");
     isUploading = false;
     // TODO: implement initState
     super.initState();
@@ -111,7 +111,7 @@ class _ReplyScreenState extends State<ReplyScreen> {
                                                         image: DecorationImage(
                                                       image: FileImage(File(
                                                           uploadedFile
-                                                              .file.path)),
+                                                              .file!.path)),
                                                     )),
                                                   )
                                                 : Text(
@@ -263,7 +263,7 @@ class _ReplyScreenState extends State<ReplyScreen> {
   void iconButtonPressed(String type) async {
     _showSpinner = true;
     setState(() {});
-    UploadFileClass uploadFile = new UploadFileClass(callBack);
+    UploadFileClass uploadFile = new UploadFileClass(callBack, "reply");
     bool isSelected = await uploadFile.uploadFile(type);
     if (isSelected) uploadFileList.add(uploadFile);
     _showSpinner = false;

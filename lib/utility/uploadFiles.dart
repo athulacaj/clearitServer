@@ -8,18 +8,19 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 // import 'package:file_picker/file_picker.dart';
 
 class UploadFileClass {
-  UploadFileClass(this.callBack);
+  UploadFileClass(this.callBack, this.whichContext);
   Function callBack;
+  String whichContext;
   double progress = 0.4;
-  PickedFile pickedFile;
-  File file;
-  String url;
-  String type;
+  PickedFile? pickedFile;
+  File? file;
+  String? url;
+  String? type;
   bool isUploaded = false;
 
   Future<bool> uploadFile(String type) async {
     this.type = type;
-    FilePickerResult result;
+    FilePickerResult? result;
     if (type == 'image') {
       print('selected image');
       result = await FilePicker.platform.pickFiles(
@@ -37,22 +38,22 @@ class UploadFileClass {
       result = await FilePicker.platform.pickFiles(type: FileType.audio);
     }
     if (result != null) {
-      file = File(result.files.single.path);
-      upload();
+      file = File(result.files.single.path!);
+      upload(whichContext);
       return true;
     } else {
       return false;
     }
   }
 
-  upload() async {
-    String fileName = file.path.split('/').last;
+  upload(String whichContext) async {
+    String fileName = file!.path.split('/').last;
     int dateInMs = DateTime.now().millisecondsSinceEpoch;
     int year = DateTime.now().year;
     int month = DateTime.now().month;
     firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-        .ref('reply/$year/$month/${dateInMs % 1000}_$fileName')
-        .putFile(file);
+        .ref('$whichContext/$year/$month/${dateInMs % 1000}_$fileName')
+        .putFile(file!);
 
     task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
       progress =

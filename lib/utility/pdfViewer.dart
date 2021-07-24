@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 class PdfScreen extends StatefulWidget {
-  final String url;
+  final String? url;
   PdfScreen({this.url});
 
   @override
@@ -15,10 +15,10 @@ class PdfScreen extends StatefulWidget {
 class _PdfScreenState extends State<PdfScreen> {
   String urlPDFPath = "";
   bool exists = true;
-  int _totalPages = 0;
+  int? _totalPages = 0;
   int _currentPage = 0;
   bool pdfReady = false;
-  PDFViewController _pdfViewController;
+  late PDFViewController _pdfViewController;
   bool loaded = false;
 
   Future<File> getFileFromUrl(String url, {name}) async {
@@ -41,7 +41,7 @@ class _PdfScreenState extends State<PdfScreen> {
 
   @override
   void initState() {
-    getFileFromUrl(widget.url).then(
+    getFileFromUrl(widget.url!).then(
       (value) => {
         setState(() {
           if (value != null) {
@@ -83,9 +83,9 @@ class _PdfScreenState extends State<PdfScreen> {
               _pdfViewController = vc;
             });
           },
-          onPageChanged: (int page, int total) {
+          onPageChanged: (int? page, int? total) {
             setState(() {
-              _currentPage = page;
+              _currentPage = page!;
             });
           },
           onPageError: (page, e) {},
@@ -116,7 +116,7 @@ class _PdfScreenState extends State<PdfScreen> {
               color: Colors.black,
               onPressed: () {
                 setState(() {
-                  if (_currentPage < _totalPages - 1) {
+                  if (_currentPage < _totalPages! - 1) {
                     _currentPage++;
                     _pdfViewController.setPage(_currentPage);
                   }

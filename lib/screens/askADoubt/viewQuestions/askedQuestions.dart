@@ -1,9 +1,9 @@
+import 'package:clearit_server/screens/askADoubt/viewQuestions/ImageView.dart';
 import 'package:clearit_server/screens/commonAppbar.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:full_screen_image/full_screen_image.dart';
 import 'package:provider/provider.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'individualQuestion.dart';
 
@@ -41,18 +41,22 @@ class _AskedQuestionsState extends State<AskedQuestions> {
                 SizedBox(height: 20),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: _firestore.collection('askDoubt').snapshots(),
+                    stream: _firestore
+                        .collection('askDoubt')
+                        .orderBy("date", descending: true)
+                        .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(child: CircularProgressIndicator());
                       }
-                      List<DocumentSnapshot> historyList = snapshot.data.docs;
+                      List<DocumentSnapshot> historyList = snapshot.data!.docs;
                       print(historyList);
                       return ListView.builder(
                           itemCount: historyList.length,
                           itemBuilder: (context, int i) {
-                            Map details = historyList[i].data();
+                            Map details =
+                                historyList[i].data() as Map<dynamic, dynamic>;
                             return Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: InkWell(
@@ -87,22 +91,10 @@ class _AskedQuestionsState extends State<AskedQuestions> {
                                                   ? SizedBox(
                                                       width: 70,
                                                       height: 70,
-                                                      child: FullScreenWidget(
-                                                        child: Center(
-                                                          child: Hero(
-                                                            tag: details[
-                                                                    'queryDetails']
-                                                                [0]['query'],
-                                                            child:
-                                                                Image.network(
-                                                              details['queryDetails']
-                                                                      [0]
-                                                                  ['imageUrl'],
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      child: ImageViewScreen(
+                                                          image: details[
+                                                                  'queryDetails']
+                                                              [0]['imageUrl']),
                                                     )
                                                   : Container(),
                                               SizedBox(width: 10),

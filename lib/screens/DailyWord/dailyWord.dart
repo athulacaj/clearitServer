@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:clearit_server/utility/functions/showToast.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
+import 'package:clearit_server/utility/uploadFiles.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:clearit_server/utility/widgets/commonAppBar.dart';
 import 'dataBase.dart';
@@ -16,13 +18,13 @@ class DailyWord extends StatefulWidget {
   _DailyWordState createState() => _DailyWordState();
 }
 
-Size size;
+late Size size;
 
 class _DailyWordState extends State<DailyWord> {
-  TextEditingController doubtController;
-  String note;
-  String word;
-  String imgUrl;
+  TextEditingController? doubtController;
+  String? note;
+  String? word;
+  String? imgUrl;
   bool isUploading = false;
 
   @override
@@ -104,7 +106,7 @@ class _DailyWordState extends State<DailyWord> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    uploadFile != null && uploadFile.file != null
+                    uploadFile != null && uploadFile!.file != null
                         ? Container(
                             height: 80,
                             width: 240,
@@ -116,10 +118,10 @@ class _DailyWordState extends State<DailyWord> {
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                     image:
-                                        FileImage(File(uploadFile.file.path)),
+                                        FileImage(File(uploadFile!.file!.path)),
                                   )),
                                 ),
-                                uploadFile.progress == 1.0
+                                uploadFile!.progress == 1.0
                                     ? Container()
                                     : Positioned(
                                         left: 105,
@@ -129,7 +131,7 @@ class _DailyWordState extends State<DailyWord> {
                                           width: 30,
                                           child: CircularProgressIndicator(
                                             backgroundColor: Colors.grey,
-                                            value: uploadFile.progress,
+                                            value: uploadFile!.progress,
                                           ),
                                         ),
                                       ),
@@ -165,12 +167,12 @@ class _DailyWordState extends State<DailyWord> {
                       ),
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        if (uploadFile != null && !uploadFile.isUploaded) {
+                        if (uploadFile != null && !uploadFile!.isUploaded) {
                           showToast(
                               "You are uploading a file ..!! Please wait until the upload finish");
                         } else {
-                          if (uploadFile != null && uploadFile.url != null) {
-                            imageUrl = uploadFile.url;
+                          if (uploadFile != null && uploadFile!.url != null) {
+                            imageUrl = uploadFile!.url;
                           }
                           Map<String, dynamic> dailyWordDetails = {
                             'word': word,
@@ -198,14 +200,14 @@ class _DailyWordState extends State<DailyWord> {
     );
   }
 
-  String imageUrl;
-  UploadFileClass uploadFile;
+  String? imageUrl;
+  UploadFileClass? uploadFile;
   void addImageFunction(String type) async {
     _showSpinner = true;
     setState(() {});
-    uploadFile = new UploadFileClass(callBack);
-    bool isSelected = await uploadFile.uploadFile(type);
-    if (isSelected) imageUrl = uploadFile.url;
+    uploadFile = new UploadFileClass(callBack, "dailyWord");
+    bool isSelected = await uploadFile!.uploadFile(type);
+    if (isSelected) imageUrl = uploadFile!.url;
     _showSpinner = false;
     setState(() {});
   }
@@ -214,14 +216,3 @@ class _DailyWordState extends State<DailyWord> {
 // int dropIndex=0;
 String dropValue = dropDown[0];
 List dropDown = ['bank', 'psc'];
-
-void showToast(String message) {
-  Fluttertoast.showToast(
-      msg: "$message",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 2,
-      backgroundColor: Colors.grey.shade800,
-      textColor: Colors.white,
-      fontSize: 16.0);
-}

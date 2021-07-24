@@ -1,25 +1,33 @@
+import 'package:clearit_server/screens/DailyWord/dailyWord.dart';
+import 'package:clearit_server/utility/functions/showToast.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
 import 'package:clearit_server/utility/uploadFiles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class AddNotesScreen extends StatefulWidget {
-  final String topic;
+  final String? topic;
   AddNotesScreen({this.topic});
   @override
   _AddNotesScreenState createState() => _AddNotesScreenState();
 }
 
 List returnList = [];
-String image;
-String pdf;
+String? image;
+String? pdf;
 bool _showSpinner = false;
 TextEditingController titleController = TextEditingController();
-UploadFileClass uploadFile;
+late UploadFileClass uploadFile;
 
 class _AddNotesScreenState extends State<AddNotesScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -70,7 +78,7 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
                                     setState(() {
                                       if (isSelected) image = uploadFile.url;
                                     });
-                                  });
+                                  }, "addNotes");
                                   isSelected =
                                       await uploadFile.uploadFile('image');
                                   if (isSelected) image = uploadFile.url;
@@ -92,7 +100,8 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
                             IconButton(
                                 icon: Icon(Icons.picture_as_pdf, size: 40),
                                 onPressed: () async {
-                                  uploadFile = new UploadFileClass(() {});
+                                  uploadFile =
+                                      new UploadFileClass(() {}, "addNotes");
                                   bool isSelected =
                                       await uploadFile.uploadFile('pdf');
                                   if (isSelected) pdf = uploadFile.url;
@@ -113,14 +122,24 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
                     TextButton(
                         onPressed: () async {
                           print(uploadFile.url);
-                          // CollectionReference doc = _firestore
-                          //     .collection('notes/topics/${widget.topic}');
-                          // await doc.add({
-                          //   'title': titleController.text,
-                          //   'image': image,
-                          //   "pdf": pdf
-                          // });
-                          // Navigator.pop(context);
+                          if (image == null && pdf == null) {
+                            showToast(
+                                "images or pdf not uploaded please wait...");
+                          } else {
+                            _showSpinner = true;
+                            setState(() {});
+                            CollectionReference doc = _firestore
+                                .collection('notes/topics/${widget.topic}');
+                            await doc.add({
+                              'title': titleController.text,
+                              'image': image,
+                              "pdf": pdf
+                            });
+                            _showSpinner = false;
+                            setState(() {});
+                            clear();
+                            Navigator.pop(context);
+                          }
                         },
                         child: Container(
                             height: 50,
@@ -131,6 +150,19 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
                               'Save',
                               style: TextStyle(color: Colors.white),
                             ))),
+                    TextButton(
+                        onPressed: () {
+                          clear();
+                        },
+                        child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            color: Colors.grey,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Clear',
+                              style: TextStyle(color: Colors.white),
+                            ))),
                   ],
                 ),
               ),
@@ -139,5 +171,12 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
         ),
       ),
     );
+  }
+
+  void clear() {
+    image = null;
+    pdf = null;
+    titleController.text = '';
+    setState(() {});
   }
 }

@@ -2,6 +2,8 @@ import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:clearit_server/provider/account.dart';
 import 'package:clearit_server/screens/auth/ExtractedButton.dart';
 import 'package:clearit_server/screens/homeScreen/homescreen.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
+import 'package:clearit_server/utility/widgets/otpWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_cupertino.dart';
@@ -11,8 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'autoVerify.dart';
@@ -31,7 +32,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _phoneController = TextEditingController();
   final _codeController = TextEditingController();
   var _forceCodeResendToken;
-  Future<bool> loginUser(String phone, BuildContext context) async {
+  Future<void> loginUser(String phone, BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     _showSpinner = true;
     setState(() {});
@@ -63,8 +64,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
           Map _userDetails = {
             'phone': user.phoneNumber,
-            'name': value.data()['name'],
-            'email': value.data()['email'],
+            'name': value.data()!['name'],
+            'email': value.data()!['email'],
             'uid': user.uid
           };
           Provider.of<MyAccount>(context, listen: false).addUser(_userDetails);
@@ -84,7 +85,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         Fluttertoast.showToast(
             msg: '${exception.code}', backgroundColor: Colors.black45);
       },
-      codeSent: (String verificationId, [int forceResendingToken]) {
+      codeSent: (String verificationId, [int? forceResendingToken]) {
         _showSpinner = false;
         setState(() {});
 
@@ -131,14 +132,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                       height: 70,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: PinEntryTextField(
-                                          fields: 6,
-                                          showFieldAsBox: true,
-                                          onSubmit: (String pin) {
-                                            //end showDialog()
-                                            _codeController.text = pin;
-                                          }, // end onSubmit
-                                        ), // end PinEntryTextField()
+                                        child: OtpWidget(
+                                            _codeController), // end PinEntryTextField()
                                       ), // end Padding()
                                     ),
                                   ],
@@ -192,10 +187,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
                                             Map _userDetails = {
                                               'phone': user.phoneNumber,
-                                              'name': value.data()['name'],
-                                              'email': value.data()['email'],
+                                              'name': value.data()!['name'],
+                                              'email': value.data()!['email'],
                                               'uid': user.uid,
-                                              'photo': value.data()['photo'],
+                                              'photo': value.data()!['photo'],
                                             };
                                             Provider.of<MyAccount>(context,
                                                     listen: false)

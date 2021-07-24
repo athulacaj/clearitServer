@@ -1,16 +1,15 @@
-import 'package:clearit_server/screens/DailyWord/dailyWord.dart';
+import 'package:clearit_server/utility/functions/showToast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class DoubtsReplyDatabaseClass {
-  final Map solution;
-  final String id;
-  final BuildContext context;
-  final int replyingNo;
+  final Map? solution;
+  final String? id;
+  final BuildContext? context;
+  final int? replyingNo;
 
   DoubtsReplyDatabaseClass(
       {this.solution, this.context, this.id, this.replyingNo});
@@ -21,8 +20,8 @@ class DoubtsReplyDatabaseClass {
     DocumentReference ref =
         FirebaseFirestore.instance.collection('askDoubt').doc(id);
     List queryDetails = (await ref.get())['queryDetails'];
-    print(queryDetails[replyingNo]);
-    queryDetails[replyingNo]['solution'] = solution;
+    print(queryDetails[replyingNo!]);
+    queryDetails[replyingNo!]['solution'] = solution;
     try {
       await ref.update({'queryDetails': queryDetails, "isReplied": true}).then(
           (value) => showToast("Saved Successfully"));

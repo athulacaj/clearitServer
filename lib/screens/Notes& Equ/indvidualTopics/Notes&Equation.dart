@@ -1,4 +1,5 @@
 import 'package:clearit_server/screens/commonAppbar.dart';
+import 'package:clearit_server/utility/widgets/ImageView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,7 @@ import 'addNotes.dart';
 import 'pdfViewer.dart';
 
 class NotesAndEquationScreen extends StatefulWidget {
-  final String topic;
+  final String? topic;
 
   NotesAndEquationScreen({this.topic});
   @override
@@ -46,7 +47,7 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
                       child: Text('loading ...'),
                     );
                   }
-                  notesList = snapshot.data.docs;
+                  notesList = snapshot.data!.docs;
                   return ListView.builder(
                     itemCount: notesList.length,
                     itemBuilder: (BuildContext context, int i) {
@@ -86,7 +87,16 @@ class _NotesAndEquationScreenState extends State<NotesAndEquationScreen> {
                                             : IconButton(
                                                 icon:
                                                     Icon(Icons.image, size: 40),
-                                                onPressed: () {}),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ImageViewScreen(
+                                                                  image: notesList[
+                                                                          i][
+                                                                      'image'])));
+                                                }),
                                       ),
                                     ],
                                   ),

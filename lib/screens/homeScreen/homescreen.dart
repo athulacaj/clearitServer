@@ -1,4 +1,11 @@
 import 'package:clearit_server/screens/Notes&%20Equ/notesEquationIndex.dart';
+import 'package:clearit_server/screens/RapidFire/AddRapidFire.dart';
+import 'package:clearit_server/screens/RapidFire/viewRapidFire/viewRapidFireScreen.dart';
+import 'package:clearit_server/screens/mindMath/ViewMindMathScreen.dart';
+import 'package:clearit_server/screens/mindMath/addMindMath.dart';
+import 'package:clearit_server/screens/mindMath/mindMathDatabase.dart';
+import 'package:clearit_server/screens/shortNotes/addShortNotes.dart';
+import 'package:clearit_server/screens/shortNotes/viewShortNotesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:clearit_server/screens/DailyWord/dailyWord.dart';
 import 'package:clearit_server/screens/askADoubt/viewQuestions/askedQuestions.dart';
@@ -51,7 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewRapidFireScreen()));
+                  },
                   child: Text('Rapid Fire'),
                 ),
                 FlatButton(
@@ -70,16 +82,28 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FlatButton(
-                  onPressed: () {},
-                  child: Text('Recently Asked Questions'),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewShortNotesScreen()));
+                  },
+                  child: Text('Short Notes'),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    Map<String, dynamic> data =
+                        await MindMathDatabase().getData();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewMindMathScreen()));
+                  },
+                  child: Text('Mind Math'),
                 ),
               ],
             ),
             SizedBox(height: 30),
-            FlatButton(
-              onPressed: () {},
-              child: Text('View Our Solution'),
-            ),
           ],
         ),
       ),

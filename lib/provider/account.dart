@@ -20,7 +20,7 @@ void deleteUserData() async {
 
 class MyAccount with ChangeNotifier {
   String uid = 'null';
-  Map userDetails;
+  Map? userDetails;
   int coins = 0;
   void setUid(String uidi) {
     uid = uidi;
@@ -43,7 +43,7 @@ class MyAccount with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map> getUserData() async {
+  Future<Map?> getUserData() async {
     final localData = await SharedPreferences.getInstance();
     String userData = localData.getString('user') ?? '';
     if (userData == "null" || userData == '') {

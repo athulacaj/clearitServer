@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget commonAppBar({String title, BuildContext context}) {
+PreferredSizeWidget commonAppBar({String? title, BuildContext? context}) {
   return AppBar(
     // brightness: Brightness.light,
     backgroundColor: Colors.white,
     leading: IconButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: () => Navigator.pop(context!),
       icon: Icon(
         Icons.arrow_back,
         color: Colors.black,

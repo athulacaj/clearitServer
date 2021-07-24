@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'imageView.dart';
 
 class IndividualQuestionsScreen extends StatefulWidget {
-  final List detailsList;
+  final List? detailsList;
   final String id;
-  IndividualQuestionsScreen({this.detailsList, @required this.id});
+  IndividualQuestionsScreen({this.detailsList, required this.id});
   @override
   _IndividualQuestionsScreenState createState() =>
       _IndividualQuestionsScreenState();
 }
 
 // AudioPlayer audioPlayer = AudioPlayer();
-List detailsList = [];
+List? detailsList = [];
 bool _isPlaying = false;
 bool _isAlreadyPlayed = false;
 
@@ -39,9 +39,9 @@ class _IndividualQuestionsScreenState extends State<IndividualQuestionsScreen> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: detailsList.length,
+                itemCount: detailsList!.length,
                 itemBuilder: (BuildContext context, int i) {
-                  Map details = detailsList[i];
+                  Map details = detailsList![i];
                   return Container(
                     // height: size.height - 80,
                     decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _IndividualQuestionsScreenState extends State<IndividualQuestionsScreen> {
                       MaterialPageRoute(
                           builder: (context) => ReplyScreen(
                                 id: widget.id,
-                                replyingNo: detailsList.length - 1,
+                                replyingNo: detailsList!.length - 1,
                               )));
                 },
                 child: Container(

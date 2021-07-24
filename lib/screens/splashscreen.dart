@@ -1,8 +1,8 @@
 import 'package:clearit_server/provider/account.dart';
+import 'package:clearit_server/utility/loadingWidget/ModalProgressHudWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'auth/phoneAuth/login.dart';
 import 'homeScreen/homescreen.dart';
@@ -28,7 +28,7 @@ class _SplashScreenWindowState extends State<SplashScreenWindow> {
     await initializeFlutterFire();
     bool _isLogin = await login(context);
     if (_isLogin == true) {
-      Map userDetails =
+      Map? userDetails =
           await Provider.of<MyAccount>(context, listen: false).getUserData();
       if (userDetails == null) {
       } else {
@@ -62,9 +62,6 @@ class _SplashScreenWindowState extends State<SplashScreenWindow> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
-      progressIndicator: RefreshProgressIndicator(
-        valueColor: new AlwaysStoppedAnimation<Color>(Colors.green),
-      ),
       inAsyncCall: _showSpinner,
       child: Scaffold(
         body: Center(
@@ -75,13 +72,13 @@ class _SplashScreenWindowState extends State<SplashScreenWindow> {
   }
 }
 
-User _user;
+User? _user;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 login(BuildContext context) async {
   bool isLogin = false;
-  final User user = _auth.currentUser;
+  final User? user = _auth.currentUser;
   if (user != null) {
     _user = user;
     final uid = user.uid;
