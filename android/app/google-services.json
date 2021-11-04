@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "401887741658",
+    "firebase_url": "https://clearit-1b35b.firebaseio.com",
+    "project_id": "clearit-1b35b",
+    "storage_bucket": "clearit-1b35b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401887741658:android:f559c0df75cd21925b07e3",
+        "android_client_info": {
+          "package_name": "co.attaras.clearit_server"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401887741658-2gt4ovsd246vmh4agh7fvrdkb3cj25le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV21v7OU47WLaTp6J3DIUrkPvSKf6sZpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401887741658-2gt4ovsd246vmh4agh7fvrdkb3cj25le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401887741658:android:c474f67cb62bf4dd5b07e3",
+        "android_client_info": {
+          "package_name": "co.attaras.studywithfun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401887741658-j7r46329icj0nq0s638cesga7r8j3en7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.attaras.studywithfun",
+            "certificate_hash": "4e29ac8d69ac5f0637005859e9b0943dd1f77185"
+          }
+        },
+        {
+          "client_id": "401887741658-q83lohomlkcdv0p8mra9d5q36kv8q6eg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.attaras.studywithfun",
+            "certificate_hash": "9f2eea33be74c546bbfb4fb785a487345f026846"
+          }
+        },
+        {
+          "client_id": "401887741658-2gt4ovsd246vmh4agh7fvrdkb3cj25le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV21v7OU47WLaTp6J3DIUrkPvSKf6sZpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401887741658-2gt4ovsd246vmh4agh7fvrdkb3cj25le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
